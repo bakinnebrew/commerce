@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Bid</h2>
+    <h4>Enter bid amount</h4> 
+    <form action = "{% url 'bid' listing.id %}" method = "POST">
+        {% csrf_token %}
+        {{ form }} 
+        <input type="submit" value="Submit Bid">
+    </form>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    
+    {% for listing in listings %}
+    <ul>
+        <a href="{% url 'listing' listing.id %}">
+            {{ listing.title }} 
+        </a>
+            - ${{ listing.current_price }} -- {{ listing.description }} <br>
+            Auction Ends: {{ listing.auction_end_date }}
+        
+            <img src="{{ listing.listing_image.url }}" alt="Image Not Found" style="max-height:300px">
+    </ul>
+    {% endfor %}
+{% endblock %}

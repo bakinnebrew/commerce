@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    
+    {% if message %}
+    {{ message }}
+    {% endif %}
+    {% for watchlist_item in watchlist_items %}
+    <ul>
+        <a href="{% url 'listing' watchlist_item.id %}"> {{ watchlist_item }} </a> <br>
+        Auction Ends: {{ watchlist_item.auction_end_date }}
+        <form action = "{% url 'remove_from_watchlist' watchlist_item.id %}">
+            <button> Remove from Watchlist </button>
+        </form>
+    </ul>
+    {% empty %} <br>
+    There are currently no items in your Watchlist
+    {% endfor %}
+{% endblock %}

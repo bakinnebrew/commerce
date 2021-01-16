@@ -1,0 +1,76 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h1> {{ listing.title }}</h1>
+    <h2> {{ listing.category }}</h2>
+
+    <ul>
+        <img src="{{ listing.listing_image.url }}" alt="connect" style="max-height:300px">
+        <h5>Price: ${{ listing.current_price }} </h5>
+        <h5>Description: {{ listing.description }} </h5>
+        <h5>Auction Ends: {{ listing.auction_end_date }}</h5>
+        <h6>Most Recent Bidder: {{ recent_bids.user }} </h6>
+    </ul>
+    <form action="{% url 'bid' listing.id %}" method="GET">
+        {% csrf_token %}
+        <input type="submit" value="Bid on Item">
+    </form>
+    <br>
+    <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
+        {% csrf_token %}
+        <button> Add to Watchlist </button>
+    </form>
+        {% if watchlist_message %}
+        {{ watchlist_message }}
+        {% endif %}
+    <br>
+    {% if listing.owner == user %}
+    <form action="{% url 'delete' listing.id %}" method="GET">
+        {% csrf_token %}
+        <button>Delete Listing</button>
+    </form>
+            {% if message %}
+                {{ message }}
+            <form action ="{% url 'delete' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button>Yes, delete. </button>
+            </form>
+            <form action ="{% url 'listing' listing.id %}">
+                {% csrf_token %}
+                <button>On second thought, No. </button>
+            </form>
+            {% endif %}
+    {% endif %}
+    {% if listing.owner == user %}
+    <form action="{% url 'close' listing.id %}" method="GET">
+        {% csrf_token %}
+        <button>Close Listing</button>
+    </form>
+            {% if close_message %}
+                {{ close_message }}
+            <form action ="{% url 'close' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button>Yes, close. </button>
+            </form>
+            <form action ="{% url 'close' listing.id %}">
+                {% csrf_token %}
+                <button>On second thought, No. </button>
+            </form>
+            {% endif %}
+    {% endif %}
+    <form action = "{% url 'comment' listing.id %}" method="GET">
+        <button> Submit Comment </button>
+    </form>
+
+    {% for comment in comments %}
+        {% if listing.id == comment.listing_id.id %}
+        {{ comment.user }} on {{ comment.comment_time }}
+            <p style = "margin-top: 5px">{{ comment.content }} </p>
+            <br>
+        {% endif %}
+    {% empty %}
+            There are no comments to display
+    {% endfor %}
+
+{% endblock %}
+ 
